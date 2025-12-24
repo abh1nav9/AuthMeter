@@ -20,7 +20,8 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { primary, others } = visibilityManager.getVisibility(
-    analysis.scenarios
+    analysis.scenarios,
+    "offline_fast_hash"
   );
 
   return (
@@ -28,17 +29,17 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
       <div className="flex h-full flex-col">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
-            <div className="text-sm font-medium text-[color:var(--app-text)]">
+            <div className="text-sm font-medium text-[var(--app-text)]">
               Estimated time to crack
             </div>
-            <div className="text-xs text-[color:var(--app-text-subtle)]">
+            <div className="text-xs text-[var(--app-text-subtle)]">
               Real attackers use smarter guesses (leaks, dictionaries, rules).
               Treat this as a rough range.
             </div>
           </div>
           <Button
             variant="ghost"
-            className="h-8 whitespace-nowrap px-3"
+            className="h-9 whitespace-nowrap px-3"
             onClick={() => setIsExpanded((v) => !v)}
             disabled={!primary || others.length === 0}
           >
@@ -54,8 +55,8 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
           </Button>
         </div>
 
-        <div className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-[color:var(--app-border)]">
-          <div className="grid grid-cols-4 bg-[color:var(--app-surface-2)] px-3 py-2 text-xs text-[color:var(--app-text-muted)]">
+        <div className="mt-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-[var(--app-border)]">
+          <div className="grid grid-cols-4 bg-[var(--app-surface-2)] px-3 py-2 text-xs text-[var(--app-text-muted)]">
             <div>Scenario</div>
             <div className="text-right">Speed</div>
             <div className="text-right">Avg</div>
@@ -63,18 +64,16 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
           </div>
 
           {primary ? (
-            <div className="min-h-0 flex-1 overflow-auto divide-y divide-[color:var(--app-border)]">
+            <div className="min-h-0 flex-1 overflow-auto divide-y divide-[var(--app-border)]">
               <div className="grid grid-cols-4 px-3 py-2 text-sm">
-                <div className="text-[color:var(--app-text)]">
-                  {primary.name}
-                </div>
-                <div className="text-right text-[color:var(--app-text-muted)]">
+                <div className="text-[var(--app-text)]">{primary.name}</div>
+                <div className="text-right text-[var(--app-text-muted)]">
                   {formatGuessesPerSecond(primary.guessesPerSecond)}
                 </div>
-                <div className="text-right font-medium text-[color:var(--app-text)]">
+                <div className="text-right font-medium text-[var(--app-text)]">
                   {formatter.formatSeconds(primary.expectedTimeSeconds)}
                 </div>
-                <div className="text-right text-[color:var(--app-text-muted)]">
+                <div className="text-right text-[var(--app-text-muted)]">
                   {formatter.formatSeconds(primary.worstCaseTimeSeconds)}
                 </div>
               </div>
@@ -85,16 +84,14 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
                       key={s.id}
                       className="grid grid-cols-4 px-3 py-2 text-sm"
                     >
-                      <div className="text-[color:var(--app-text)]">
-                        {s.name}
-                      </div>
-                      <div className="text-right text-[color:var(--app-text-muted)]">
+                      <div className="text-[var(--app-text)]">{s.name}</div>
+                      <div className="text-right text-[var(--app-text-muted)]">
                         {formatGuessesPerSecond(s.guessesPerSecond)}
                       </div>
-                      <div className="text-right font-medium text-[color:var(--app-text)]">
+                      <div className="text-right font-medium text-[var(--app-text)]">
                         {formatter.formatSeconds(s.expectedTimeSeconds)}
                       </div>
-                      <div className="text-right text-[color:var(--app-text-muted)]">
+                      <div className="text-right text-[var(--app-text-muted)]">
                         {formatter.formatSeconds(s.worstCaseTimeSeconds)}
                       </div>
                     </div>
@@ -102,7 +99,7 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
                 : null}
             </div>
           ) : (
-            <div className="px-3 py-3 text-sm text-[color:var(--app-text-subtle)]">
+            <div className="px-3 py-3 text-sm text-[var(--app-text-subtle)]">
               Type a password to see estimates.
             </div>
           )}

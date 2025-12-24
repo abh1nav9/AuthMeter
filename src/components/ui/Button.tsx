@@ -15,8 +15,8 @@ export function Button({
 }: ButtonProps) {
   const variantClasses =
     variant === "primary"
-      ? "bg-[color:var(--app-text)] text-[color:var(--app-bg)] hover:opacity-90"
-      : "bg-transparent text-[color:var(--app-text)] hover:bg-[color:var(--app-surface-2)]";
+      ? "bg-[var(--app-text)] text-[var(--app-bg)] hover:opacity-90"
+      : "bg-transparent text-[var(--app-text)] hover:bg-[var(--app-surface-2)]";
 
   return (
     <button

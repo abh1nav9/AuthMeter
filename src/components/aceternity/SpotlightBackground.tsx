@@ -15,7 +15,7 @@ export function SpotlightBackground({
   return (
     <div
       className={cx(
-        "relative h-dvh overflow-hidden bg-(--app-bg) text-(--app-text)",
+        "relative h-dvh overflow-hidden bg-[var(--app-bg)] text-[var(--app-text)]",
         className
       )}
     >

@@ -14,13 +14,13 @@ export interface BadgeProps extends PropsWithChildren {
 export function Badge({ tone = "neutral", className, children }: BadgeProps) {
   const toneClasses: Record<BadgeTone, string> = {
     neutral:
-      "bg-(--badge-neutral-bg) text-(--badge-neutral-text) border-(--badge-neutral-border)",
+      "bg-[var(--badge-neutral-bg)] text-[var(--badge-neutral-text)] border-[var(--badge-neutral-border)]",
     danger:
-      "bg-(--badge-danger-bg) text-(--badge-danger-text) border-(--badge-danger-border)",
+      "bg-[var(--badge-danger-bg)] text-[var(--badge-danger-text)] border-[var(--badge-danger-border)]",
     warning:
-      "bg-(--badge-warning-bg) text-(--badge-warning-text) border-(--badge-warning-border)",
+      "bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)] border-[var(--badge-warning-border)]",
     success:
-      "bg-(--badge-success-bg) text-(--badge-success-text) border-(--badge-success-border)",
+      "bg-[var(--badge-success-bg)] text-[var(--badge-success-text)] border-[var(--badge-success-border)]",
   };
 
   return (

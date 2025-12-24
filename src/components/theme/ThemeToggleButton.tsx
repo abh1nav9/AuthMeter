@@ -14,7 +14,7 @@ export function ThemeToggleButton({ theme, onToggle }: ThemeToggleButtonProps) {
     <Button
       variant="ghost"
       onClick={onToggle}
-      className="border border-[color:var(--app-border)] p-0"
+      className="border border-[var(--app-border)] p-0"
       aria-label={label}
       title={label}
     >

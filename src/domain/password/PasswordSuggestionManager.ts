@@ -1,9 +1,10 @@
 import { PassphraseGenerator } from "./PassphraseGenerator";
 import { PasswordCharacterSetManager } from "./PasswordCharacterSetManager";
 import { PasswordRandomTokenGenerator } from "./PasswordRandomTokenGenerator";
+import type { PasswordContext } from "./PasswordContext";
 
 export interface PasswordSuggestionManagerProtocol {
-  suggest(password: string, count: number): string[];
+  suggest(password: string, count: number, context?: PasswordContext): string[];
 }
 
 export class PasswordSuggestionManager
@@ -26,7 +27,11 @@ export class PasswordSuggestionManager
       params?.tokenGenerator ?? new PasswordRandomTokenGenerator();
   }
 
-  suggest(password: string, count: number): string[] {
+  suggest(
+    password: string,
+    count: number,
+    context?: PasswordContext
+  ): string[] {
     const trimmed = password.trim();
     const safeCount = Math.max(0, Math.min(5, Math.floor(count)));
     if (safeCount === 0) return [];
@@ -47,7 +52,9 @@ export class PasswordSuggestionManager
     candidates.push(...this.passphraseGenerator.generate(3));
 
     const unique = this.uniqueNonEmpty(candidates);
-    const filtered = unique.filter((s) => s !== trimmed);
+    const filtered = unique
+      .filter((s) => s !== trimmed)
+      .filter((s) => !this.containsContextTerm(s, context));
 
     return filtered.slice(0, safeCount);
   }
@@ -100,5 +107,38 @@ export class PasswordSuggestionManager
       set.add(t);
     }
     return Array.from(set);
+  }
+
+  private containsContextTerm(
+    candidate: string,
+    context?: PasswordContext
+  ): boolean {
+    const terms = this.extractTerms(context);
+    if (terms.length === 0) return false;
+    const lower = candidate.toLowerCase();
+    return terms.some((t) => t.length >= 3 && lower.includes(t));
+  }
+
+  private extractTerms(context?: PasswordContext): string[] {
+    const out: string[] = [];
+    const username = context?.username?.trim();
+    const email = context?.email?.trim();
+    const site = context?.site?.trim();
+
+    if (username) out.push(username.toLowerCase());
+    if (site) out.push(site.toLowerCase());
+    if (email) {
+      const lower = email.toLowerCase();
+      out.push(lower);
+      const localPart = lower.split("@")[0];
+      const domain = lower.split("@")[1];
+      if (localPart) out.push(localPart);
+      if (domain)
+        out.push(domain.replace(/\.(com|net|org|io|dev|app|co)$/i, ""));
+    }
+
+    return Array.from(
+      new Set(out.map((s) => s.replace(/\s+/g, "").trim()).filter(Boolean))
+    );
   }
 }

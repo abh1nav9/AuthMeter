@@ -32,4 +32,30 @@ export interface PasswordAnalysisResult {
   scenarios: AttackScenarioResult[];
   warnings: string[];
   suggestions: string[];
+  insights?: PasswordInsight[];
+  policyFindings?: PasswordPolicyFinding[];
+}
+
+export type PasswordInsightKind =
+  | "dictionary"
+  | "keyboard"
+  | "sequence"
+  | "repeat"
+  | "date"
+  | "regex"
+  | "other";
+
+export interface PasswordInsight {
+  kind: PasswordInsightKind;
+  label: string;
+  detail?: string;
+}
+
+export type PasswordPolicyFindingStatus = "pass" | "warn" | "fail";
+
+export interface PasswordPolicyFinding {
+  id: string;
+  label: string;
+  status: PasswordPolicyFindingStatus;
+  detail?: string;
 }

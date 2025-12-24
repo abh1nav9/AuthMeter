@@ -15,7 +15,7 @@ export function Progress({ value, className, barClassName }: ProgressProps) {
   return (
     <div
       className={cx(
-        "h-2 w-full overflow-hidden rounded-full bg-[color:var(--app-surface-2)]",
+        "h-2 w-full overflow-hidden rounded-full bg-[var(--app-surface-2)]",
         className
       )}
     >

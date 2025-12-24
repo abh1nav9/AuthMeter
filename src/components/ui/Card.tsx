@@ -12,7 +12,7 @@ export function Card(props: CardProps) {
   return (
     <div
       className={cx(
-        "rounded-2xl border border-[color:var(--app-border)] bg-[color:var(--app-surface)] p-4 shadow-sm backdrop-blur sm:p-5",
+        "rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 shadow-sm backdrop-blur overflow-hidden sm:p-5",
         props.className
       )}
     >

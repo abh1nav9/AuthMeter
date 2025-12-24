@@ -13,7 +13,7 @@ export function Input({ className, ...props }: InputProps) {
     <input
       {...props}
       className={cx(
-        "h-11 w-full rounded-xl border border-[color:var(--app-border)] bg-[color:var(--app-input-bg)] px-4 text-[color:var(--app-text)] outline-none placeholder:text-[color:var(--app-text-subtle)] focus:border-[color:var(--app-border)] focus:ring-2 focus:ring-[color:var(--app-ring)]",
+        "h-10 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-input-bg)] px-4 text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-subtle)] focus:border-[var(--app-border)] focus:ring-2 focus:ring-[var(--app-ring)]",
         className
       )}
     />

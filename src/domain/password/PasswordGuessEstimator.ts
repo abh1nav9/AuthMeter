@@ -11,6 +11,12 @@ export interface PasswordGuessEstimatorProtocol {
     charsetSize: number,
     entropyPenaltyBits: number
   ): PasswordGuessEstimate;
+  estimateFromPassword(
+    password: string,
+    passwordLength: number,
+    charsetSize: number,
+    entropyPenaltyBits: number
+  ): PasswordGuessEstimate;
 }
 
 export class PasswordGuessEstimator implements PasswordGuessEstimatorProtocol {
@@ -18,6 +24,15 @@ export class PasswordGuessEstimator implements PasswordGuessEstimatorProtocol {
 
   constructor(math: PasswordMath) {
     this.math = math;
+  }
+
+  estimateFromPassword(
+    _password: string,
+    passwordLength: number,
+    charsetSize: number,
+    entropyPenaltyBits: number
+  ): PasswordGuessEstimate {
+    return this.estimate(passwordLength, charsetSize, entropyPenaltyBits);
   }
 
   estimate(

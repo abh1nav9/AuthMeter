@@ -23,7 +23,7 @@ export function PasswordCheckerPage() {
               <GradientTitle>
                 AuthMeter - Password strength & Crack Time Estimator
               </GradientTitle>
-              <p className="max-w-3xl text-sm text-[color:var(--app-text-muted)]">
+              <p className="max-w-3xl text-sm text-[var(--app-text-muted)]">
                 Strength is shown as a percentage and crack-time is shown as a
                 range across common attack scenarios. No tool can model every
                 attacker or leak—use this as a guide, not a guarantee.
@@ -43,27 +43,31 @@ export function PasswordCheckerPage() {
             <PasswordInputCard
               password={vm.password}
               onPasswordChange={vm.setPassword}
-              className="col-span-12 md:col-span-5 lg:col-span-4"
+              context={vm.context}
+              onContextChange={vm.setContext}
+              className="col-span-12 md:col-span-5 lg:col-span-4 h-full min-h-0"
             />
             <StrengthResultCard
               analysis={vm.analysis}
-              className="col-span-12 md:col-span-7 lg:col-span-8"
+              className="col-span-12 md:col-span-7 lg:col-span-8 h-full min-h-0"
               pwnedEnabled={pwnedVm.enabled}
+              onPwnedEnabledChange={pwnedVm.setEnabled}
               pwnedStatus={pwnedVm.status}
             />
             <CrackTimeCard
               analysis={vm.analysis}
-              className="col-span-12 md:col-span-7 md:row-start-2 lg:col-span-7"
+              className="col-span-12 md:col-span-7 md:row-start-2 lg:col-span-7 h-full min-h-0"
             />
             <AdviceCard
               analysis={vm.analysis}
               password={vm.password}
-              className="col-span-12 md:col-span-5 md:row-start-2 lg:col-span-5"
+              context={vm.context}
+              className="col-span-12 md:col-span-5 md:row-start-2 lg:col-span-5 h-full min-h-0"
             />
           </div>
         </main>
 
-        <footer className="mt-4 shrink-0 text-xs text-[color:var(--app-text-subtle)]">
+        <footer className="mt-4 shrink-0 text-xs text-[var(--app-text-subtle)]">
           Tip: Use a password manager and unique passwords per site. For
           high-risk accounts, enable MFA.
         </footer>
