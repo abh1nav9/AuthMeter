@@ -21,7 +21,7 @@ export function PasswordCheckerPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
             <div className="space-y-2">
               <GradientTitle>
-                AuthMeter - Password strength & Crack Time Estimator
+                AuthMeter - Password Strength & Crack Time Estimator
               </GradientTitle>
               <p className="max-w-3xl text-sm text-[var(--app-text-muted)]">
                 Strength is shown as a percentage and crack-time is shown as a

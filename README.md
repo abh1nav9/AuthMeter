@@ -1,120 +1,82 @@
-# Password Checker
+# AuthMeter - Password Strength & Crack Time Estimator
 
-A modern password strength analyzer and crack-time estimator built with React, TypeScript, and Tailwind CSS. Analyzes passwords locally in the browser and provides real-time feedback on strength, estimated crack times across multiple attack scenarios, and breach exposure checks via Have I Been Pwned.
+Browser-based password strength analyzer with crack-time estimation and breach checking.
 
 ## Features
 
-- **Password Strength Analysis**
+- Entropy-based strength calculation (0-100%)
+- Pattern detection (common passwords, sequences, keyboard walks)
+- Crack time estimation for multiple attack scenarios
+- Have I Been Pwned breach check (k-anonymity protocol)
+- Password suggestions and passphrase generation
 
-  - Entropy-based strength percentage (0-100%)
-  - Character set detection (lowercase, uppercase, digits, symbols, spaces)
-  - Pattern penalty detection (common passwords, repeats, sequences, keyboard walks, year patterns)
-  - Visual strength indicator with color-coded progress bar
+## Setup
 
-- **Crack Time Estimation**
-
-  - Multiple attack scenarios:
-    - Online (rate-limited)
-    - Online (no rate limit)
-    - Offline (slow hash: bcrypt, argon2id, scrypt, PBKDF2)
-    - Offline (fast hash, GPU / fast hashes)
-  - Shows average and worst-case crack times
-  - Expandable view to see all scenarios
-
-- **Breach Exposure Check**
-
-  - Integration with Have I Been Pwned (HIBP) Pwned Passwords API
-  - Privacy-safe k-anonymity protocol (only SHA-1 prefix sent, never the full password)
-  - Real-time breach count if password appears in known data breaches
-
-- **Password Suggestions**
-
-  - Generates stronger password variants based on your input
-  - Provides passphrase-style alternatives
-  - Updates dynamically as you type
-
-- **Modern UI/UX**
-  - Bento grid layout (responsive: mobile, tablet, desktop)
-  - Dark/light theme toggle
-  - Smooth animations with Motion
-  - Aceternity UI-inspired design elements
-  - No page scroll (content fits viewport)
-
-## Tech Stack
-
-- **React 19** + **TypeScript**
-- **Vite** (build tool)
-- **Tailwind CSS v4** (styling)
-- **Motion** (animations)
-- **Lucide React** (icons)
-- **Axios** (HTTP client for HIBP API)
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-
-### Installation
+```bash
+git clone https://github.com/abh1nav9/AuthMeter
+```
 
 ```bash
 npm install
 ```
 
-### Development
-
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser.
+## Tech Stack
 
-### Build
+React 19, TypeScript, Vite, Tailwind CSS v4, zxcvbn-ts, Axios
 
-```bash
-npm run build
-```
+## How It Works
 
-Output will be in the `dist/` directory.
+### Strength Calculation
+1. **Character Set Detection** - Identifies charset size (lowercase, uppercase, digits, symbols, spaces)
+2. **Entropy Calculation** - `entropy = length × log2(charset_size)`
+3. **Pattern Penalties** - Reduces entropy for:
+   - Common passwords (30-bit penalty)
+   - Sequences (abc, 123) (10-bit penalty)
+   - Keyboard walks (qwerty) (10-bit penalty)
+   - Repeated characters (6-20 bit penalty)
+   - Year patterns (6-bit penalty)
+4. **Final Score** - Maps 0-80 bits → 0-100% scale
 
-### Preview Production Build
+### Crack Time Estimation
+- **Guess Count** = `2^effective_entropy`
+- **Time** = `guesses / (attack_rate × 2)` for average case
+- Attack rates:
+  - Online throttled: 0.1/sec
+  - Online unthrottled: 10/sec
+  - Offline slow (bcrypt/argon2): 50-2000/sec
+  - Offline fast (GPU): 10B/sec
 
-```bash
-npm run preview
-```
+### Breach Check
+- SHA-1 hash password locally
+- Send first 5 chars to HIBP API (k-anonymity)
+- API returns all hash suffixes matching prefix
+- Check if full hash exists in response
 
 ## Architecture
 
-The codebase follows **object-oriented principles** with clear separation of concerns:
+- `src/domain/` - Business logic managers
+- `src/viewmodels/` - React hooks connecting domain to UI
+- `src/components/` - UI components
+- `src/pages/` - Page components
 
-- **Domain Layer** (`src/domain/`): Business logic managers (password analysis, crack time estimation, breach checking)
-- **ViewModels** (`src/viewmodels/`): React hooks that connect domain logic to UI
-- **Components** (`src/components/`): Reusable UI components (shadcn-style primitives, password-specific cards, theme toggle)
-- **Pages** (`src/pages/`): Top-level page components
+OOP-first design: single responsibility, manager pattern, modular composition.
 
-### Key Design Principles
+## Privacy
 
-- **Single Responsibility**: Each class/function does one thing
-- **Modular Design**: Components are reusable and testable
-- **Manager Pattern**: Business logic separated into dedicated manager classes
-- **No God Classes**: Logic split across focused, small files (< 200 lines per class)
-
-## Privacy & Security
-
-- **100% Local Analysis**: Password strength and crack-time calculations run entirely in your browser
-- **Privacy-Safe Breach Check**: HIBP integration uses k-anonymity—only the first 5 characters of your password's SHA-1 hash are sent to the API
-- **No Data Storage**: Your password is never stored, logged, or sent to any server (except the anonymized HIBP prefix)
-- **No Tracking**: No analytics, cookies, or third-party trackers
-
-## Limitations
-
-- **Estimates Only**: Crack-time calculations are rough estimates. Real attackers may use:
-  - Leaked password databases
-  - Dictionary/rule-based attacks
-  - Targeted guessing (personal info, company names, etc.)
-  - Phishing or malware (bypassing password entirely)
-- **No Guarantees**: This tool provides guidance, not security guarantees. Always use unique passwords per site and enable MFA when available.
+- All analysis runs locally in browser
+- HIBP API uses k-anonymity (only SHA-1 prefix sent)
+- No data storage, logging, or tracking
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+[MIT](LICENSE)
+
+## Author
+
+**Abhinav Gautam**  
+Email: abhinavgautam092@gmail.com  
+Website: [portfolio](https://abhinavdev.vercel.app/)
