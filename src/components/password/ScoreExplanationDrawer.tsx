@@ -5,6 +5,9 @@ import type {
 import type { PwnedPasswordStatus } from "../../viewmodels/usePwnedPasswordViewModel";
 import { Drawer } from "../ui/Drawer";
 import { Badge } from "../ui/Badge";
+import { PasswordScoreExplanationManager } from "../../domain/password/PasswordScoreExplanationManager";
+import { PasswordMath } from "../../domain/password/PasswordMath";
+import { useMemo } from "react";
 
 export interface ScoreExplanationDrawerProps {
   isOpen: boolean;
@@ -16,6 +19,31 @@ export interface ScoreExplanationDrawerProps {
 export function ScoreExplanationDrawer(props: ScoreExplanationDrawerProps) {
   const policy = props.analysis.policyFindings ?? [];
   const insights = props.analysis.insights ?? [];
+
+  const explanationManager = useMemo(
+    () => new PasswordScoreExplanationManager(new PasswordMath()),
+    []
+  );
+
+  const scoreExplanation = useMemo(
+    () =>
+      explanationManager.explainScore(
+        props.analysis.estimatedEntropyBits,
+        props.analysis.strengthScorePercent,
+        props.analysis.scenarios
+      ),
+    [
+      explanationManager,
+      props.analysis.estimatedEntropyBits,
+      props.analysis.strengthScorePercent,
+      props.analysis.scenarios,
+    ]
+  );
+
+  const crackTimeExplanation = useMemo(
+    () => explanationManager.explainCrackTime(props.analysis.scenarios),
+    [explanationManager, props.analysis.scenarios]
+  );
 
   return (
     <Drawer
@@ -35,6 +63,23 @@ export function ScoreExplanationDrawer(props: ScoreExplanationDrawerProps) {
               value={`${Math.round(props.analysis.estimatedEntropyBits)} bits`}
             />
             <Metric label="Length" value={`${props.analysis.passwordLength}`} />
+          </div>
+        </Section>
+
+        <Section title="Why this score?">
+          <div className="text-sm text-[var(--app-text)] leading-relaxed">
+            {scoreExplanation.explanation}
+          </div>
+          {scoreExplanation.adjustmentReason && (
+            <div className="mt-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] p-2 text-xs text-[var(--app-text-muted)]">
+              <strong>Note:</strong> {scoreExplanation.adjustmentReason}
+            </div>
+          )}
+        </Section>
+
+        <Section title="Why this crack time?">
+          <div className="text-sm text-[var(--app-text)] leading-relaxed">
+            {crackTimeExplanation.explanation}
           </div>
         </Section>
 

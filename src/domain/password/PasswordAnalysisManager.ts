@@ -41,8 +41,11 @@ export class PasswordAnalysisManager
       charsetSize,
       penalty.entropyPenaltyBits
     );
-    const score = this.scoreManager.getScore(estimate.entropyBits);
-    const scenarios = this.crackTimeEstimator.estimate(estimate.guesses);
+    const scenarios = this.crackTimeEstimator.estimate(
+      estimate.guesses,
+      password
+    );
+    const score = this.scoreManager.getScore(estimate.entropyBits, scenarios);
     const policyFindings = this.policyManager.evaluate(password, context);
 
     const warnings = uniqueStrings([

@@ -58,13 +58,13 @@ export class PasswordPatternPenaltyManager
     if (this.hasSequence(lower)) {
       warnings.push("Sequence pattern detected (e.g., abc, 123).");
       suggestions.push("Avoid obvious sequences.");
-      penaltyBits += 10;
+      penaltyBits += 15;
     }
 
     if (this.looksLikeYear(normalized)) {
       warnings.push("Year-like pattern detected.");
       suggestions.push("Avoid using years or dates.");
-      penaltyBits += 6;
+      penaltyBits += 12;
     }
 
     if (this.containsCommonKeyboardWalk(lower)) {

@@ -12,7 +12,11 @@ export type AttackScenarioId =
   | "offline_scrypt"
   | "offline_pbkdf2"
   | "offline_slow_hash"
-  | "offline_fast_hash";
+  | "offline_fast_hash"
+  | "wordlist_basic"
+  | "wordlist_rules"
+  | "gpu_rules_fast_hash"
+  | "gpu_rules_slow_hash";
 
 export interface AttackScenarioResult {
   id: AttackScenarioId;

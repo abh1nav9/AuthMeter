@@ -19,9 +19,8 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
   );
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { primary, others } = visibilityManager.getVisibility(
-    analysis.scenarios,
-    "offline_fast_hash"
+  const { visible, hidden } = visibilityManager.getVisibility(
+    analysis.scenarios
   );
 
   return (
@@ -41,7 +40,7 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
             variant="ghost"
             className="h-9 whitespace-nowrap px-3"
             onClick={() => setIsExpanded((v) => !v)}
-            disabled={!primary || others.length === 0}
+            disabled={hidden.length === 0}
           >
             {isExpanded ? (
               <span className="inline-flex items-center gap-2 whitespace-nowrap">
@@ -63,23 +62,25 @@ export function CrackTimeCard({ analysis, className }: CrackTimeCardProps) {
             <div className="text-right">Worst</div>
           </div>
 
-          {primary ? (
+          {visible.length > 0 ? (
             <div className="min-h-0 flex-1 overflow-auto divide-y divide-[var(--app-border)]">
-              <div className="grid grid-cols-4 px-3 py-2 text-sm">
-                <div className="text-[var(--app-text)]">{primary.name}</div>
-                <div className="text-right text-[var(--app-text-muted)]">
-                  {formatGuessesPerSecond(primary.guessesPerSecond)}
+              {visible.map((s) => (
+                <div key={s.id} className="grid grid-cols-4 px-3 py-2 text-sm">
+                  <div className="text-[var(--app-text)]">{s.name}</div>
+                  <div className="text-right text-[var(--app-text-muted)]">
+                    {formatGuessesPerSecond(s.guessesPerSecond)}
+                  </div>
+                  <div className="text-right font-medium text-[var(--app-text)]">
+                    {formatter.formatSeconds(s.expectedTimeSeconds)}
+                  </div>
+                  <div className="text-right text-[var(--app-text-muted)]">
+                    {formatter.formatSeconds(s.worstCaseTimeSeconds)}
+                  </div>
                 </div>
-                <div className="text-right font-medium text-[var(--app-text)]">
-                  {formatter.formatSeconds(primary.expectedTimeSeconds)}
-                </div>
-                <div className="text-right text-[var(--app-text-muted)]">
-                  {formatter.formatSeconds(primary.worstCaseTimeSeconds)}
-                </div>
-              </div>
+              ))}
 
               {isExpanded
-                ? others.map((s) => (
+                ? hidden.map((s) => (
                     <div
                       key={s.id}
                       className="grid grid-cols-4 px-3 py-2 text-sm"
