@@ -8,7 +8,7 @@ import { PwnedPasswordStatusRow } from "./PwnedPasswordStatus";
 import { useState } from "react";
 import { ScoreExplanationDrawer } from "./ScoreExplanationDrawer";
 import { Button } from "../ui/Button";
-import { Copy, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
 export interface StrengthResultCardProps {
   analysis: PasswordAnalysisResult;
